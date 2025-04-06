@@ -1,9 +1,7 @@
-import React, { FC } from "react";
+import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 
-interface Props {}
-
-const Rides: FC<Props> = (props) => {
+const Rides = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>History</Text>

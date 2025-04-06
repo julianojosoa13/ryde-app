@@ -1,9 +1,7 @@
-import React, { FC } from "react";
+import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 
-interface Props {}
-
-const Profile: FC<Props> = (props) => {
+const Profile = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>

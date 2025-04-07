@@ -18,8 +18,12 @@ const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [pendingVerification, setPendingVerification] = useState(false);
-  const [code, setCode] = useState("");
+
+  const [verification, setVerification] = useState({
+    state: "default",
+    error: "",
+    code: "",
+  });
 
   const onSignUpPress = async () => {
     if (!isLoaded) return;
@@ -37,7 +41,10 @@ const SignUp = () => {
 
       // Set 'pendingVerification' to true to display second form
       // and capture OTP code
-      setPendingVerification(true);
+      setVerification({
+        ...verification,
+        state: "pending",
+      });
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
@@ -52,41 +59,36 @@ const SignUp = () => {
     try {
       // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code,
+        code: verification.code,
       });
 
       // If verification was completed, set the session to active
       // and redirect the user
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
-        router.replace("/(root)/(tabs)/home");
+        //router.replace("/(root)/(tabs)/home");
+        setVerification({ ...verification, state: "success" });
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
-        console.error(JSON.stringify(signUpAttempt, null, 2));
+        //console.error(JSON.stringify(signUpAttempt, null, 2));
+        setVerification({
+          ...verification,
+          error: "Verification failed!",
+          state: "failed",
+        });
       }
-    } catch (err) {
+    } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+      setVerification({
+        ...verification,
+        error: err.errors[0].longMesssage,
+        state: "failed",
+      });
     }
   };
-
-  if (pendingVerification) {
-    return (
-      <>
-        <Text>Verify your email</Text>
-        <TextInput
-          value={code}
-          placeholder="Enter your verification code"
-          onChangeText={(code) => setCode(code)}
-        />
-        <TouchableOpacity onPress={onVerifyPress}>
-          <Text>Verify</Text>
-        </TouchableOpacity>
-      </>
-    );
-  }
 
   return (
     <ScrollView className="flex-1 bg-white">

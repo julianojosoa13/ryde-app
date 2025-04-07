@@ -1,4 +1,5 @@
 import { InputFieldProps } from "@/types/type";
+import { useState } from "react";
 import {
   Image,
   Keyboard,
@@ -21,6 +22,7 @@ const InputField = ({
   className,
   ...props
 }: InputFieldProps) => {
+  const [focused, setFocused] = useState(false);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -31,7 +33,7 @@ const InputField = ({
             {label}
           </Text>
           <View
-            className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500  ${containerStyle}`}
+            className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border ${focused ? "border-primary-500" : "border-neutral-100"}   ${containerStyle}`}
           >
             {icon && (
               <Image source={icon} className={`w-6 h-6 ml-4 ${iconStyle}`} />
@@ -40,6 +42,8 @@ const InputField = ({
               className={`rounded-full p-4 font-JakartaSemiBold text-[15px] flex-1 ${inputStyle} text-left`}
               secureTextEntry={secureTextEntry}
               {...props}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
             />
           </View>
         </View>

@@ -24,6 +24,13 @@ const SignUp = () => {
 
   const onSignUpPress = async () => {
     if (!isLoaded) return;
+
+    /*  For direct testing without the clerk logic
+    setShowSuccessModal(true);
+    return;
+    //*/
+
+    //*
     const { email, password } = form;
 
     // Start sign-up process using email and password provided
@@ -48,6 +55,7 @@ const SignUp = () => {
       //console.error(JSON.stringify(err, null, 2));
       Alert.alert("Error", err.error[0].longMesssage);
     }
+    //*/
   };
 
   // Handle submission of verification form
@@ -157,7 +165,10 @@ const SignUp = () => {
             </Text>
             <CustomButton
               title="Browser Home"
-              onPress={() => router.replace("/(root)/(tabs)/home")}
+              onPress={() => {
+                setShowSuccessModal(false);
+                router.replace("/(root)/(tabs)/home");
+              }}
               className="mt-5"
             />
           </View>

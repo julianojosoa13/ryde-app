@@ -15,8 +15,8 @@ const SignUp = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const [verification, setVerification] = useState({
-    state: "success",
-    error: "",
+    state: "pending",
+    error: "Could not verify your account",
     code: "",
   });
 
@@ -156,6 +156,43 @@ const SignUp = () => {
               title="Browser Home"
               onPress={() => router.replace("/(root)/(tabs)/home")}
               className="mt-5"
+            />
+          </View>
+        </ReactNativeModal>
+
+        <ReactNativeModal isVisible={verification.state === "pending"}>
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Text className="text-2xl font-JakartaExtraBold mb-2">
+              Verification
+            </Text>
+
+            <Text className="font-Jakarta mb-5">
+              We've sent a verification code to {form.email}
+            </Text>
+
+            <InputField
+              label="Code"
+              icon={icons.lock}
+              placeholder="12345"
+              value={verification.code}
+              keyboardType={"numeric"}
+              onChangeText={(value) =>
+                setVerification({
+                  ...verification,
+                  code: value,
+                })
+              }
+            />
+
+            {verification?.error && (
+              <Text className="text-red-500 text-sm mt-1">
+                {verification.error}
+              </Text>
+            )}
+            <CustomButton
+              title="Verify Email"
+              onPress={onVerifyPress}
+              className="mt-5 bg-success-500"
             />
           </View>
         </ReactNativeModal>

@@ -15,8 +15,8 @@ const SignUp = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const [verification, setVerification] = useState({
-    state: "pending",
-    error: "Could not verify your account",
+    state: "default",
+    error: "",
     code: "",
   });
 

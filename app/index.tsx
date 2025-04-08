@@ -5,7 +5,7 @@ import React from "react";
 const Index = () => {
   const { isSignedIn } = useAuth();
 
-  if (isSignedIn) {
+  if (!isSignedIn) {
     return <Redirect href={"/(root)/(tabs)/home"} />;
   }
 

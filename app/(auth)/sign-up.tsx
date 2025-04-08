@@ -5,7 +5,7 @@ import { icons, images } from "@/constants";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
 
 import ReactNativeModal from "react-native-modal";
 
@@ -19,6 +19,8 @@ const SignUp = () => {
     error: "",
     code: "",
   });
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const onSignUpPress = async () => {
     if (!isLoaded) return;
@@ -40,10 +42,11 @@ const SignUp = () => {
         ...verification,
         state: "pending",
       });
-    } catch (err) {
+    } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      //console.error(JSON.stringify(err, null, 2));
+      Alert.alert("Error", err.error[0].longMesssage);
     }
   };
 
@@ -138,7 +141,7 @@ const SignUp = () => {
           </Link>
         </View>
 
-        <ReactNativeModal isVisible={verification.state === "success"}>
+        <ReactNativeModal isVisible={showSuccessModal}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
             <Image
               source={images.check}
@@ -160,7 +163,12 @@ const SignUp = () => {
           </View>
         </ReactNativeModal>
 
-        <ReactNativeModal isVisible={verification.state === "pending"}>
+        <ReactNativeModal
+          isVisible={verification.state === "pending"}
+          onModalHide={() => {
+            if (verification.state === "success") setShowSuccessModal(true);
+          }}
+        >
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
             <Text className="text-2xl font-JakartaExtraBold mb-2">
               Verification

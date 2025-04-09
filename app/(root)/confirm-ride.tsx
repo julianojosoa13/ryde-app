@@ -3,7 +3,7 @@ import { Text } from "react-native";
 
 const ConfirmRide = () => {
   return (
-    <RideLayout>
+    <RideLayout title="Choose your driver">
       <Text>Confirm your ride</Text>
     </RideLayout>
   );

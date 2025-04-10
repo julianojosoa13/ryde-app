@@ -5,12 +5,14 @@ export async function POST(request: Request) {
     const sql = neon(`${process.env.DATABASE_URL}`);
     const { email, name, clerkId } = await request.json();
 
-    if (!name || !email || !clerkId) {
-      return Response.json(
-        { error: "Missing required field" },
-        { status: 400 }
+    if (!name || !email || !clerkId)
+      return new Response(
+        JSON.stringify({ error: "Missing required fields" }),
+        {
+          status: 400,
+          // eslint-disable-next-line prettier/prettier
+        }
       );
-    }
 
     const response = await sql`
         INSERT INTO users (

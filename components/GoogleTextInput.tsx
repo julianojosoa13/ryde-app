@@ -1,6 +1,6 @@
 import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
-import { Image, Text, View } from "react-native";
+import { Image, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const googlePlacesApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
@@ -49,8 +49,8 @@ const GoogleTextInput = ({
         }}
         onPress={(data, details = null) => {
           handlePress({
-            latitude: details.geometry?.location.latitude,
-            longitude: details.geometry?.location.longitude,
+            latitude: details!.geometry?.location.latitude,
+            longitude: details!.geometry?.location.longitude,
             address: data.description,
           });
         }}

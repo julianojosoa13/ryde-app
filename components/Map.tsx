@@ -3,7 +3,6 @@ import { calculateRegion, generateMarkerFromData } from "@/lib/map";
 import { useDriverStore, useLocationStore } from "@/store";
 import { Driver, MarkerData } from "@/types/type";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
 
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
@@ -17,7 +16,7 @@ const Map = () => {
     destinationLongitude,
   } = useLocationStore();
 
-  const { selectedDriver, setSelectedDriver } = useDriverStore();
+  const { selectedDriver, setDrivers } = useDriverStore();
 
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
@@ -30,6 +29,7 @@ const Map = () => {
 
   useEffect(() => {
     if (Array.isArray(drivers)) {
+      setDrivers(drivers);
       if (!userLatitude || !userLongitude) return;
 
       const newMarkers = generateMarkerFromData({
@@ -40,7 +40,7 @@ const Map = () => {
 
       setMarkers(newMarkers);
     }
-  }, [drivers]);
+  }, [setDrivers, userLatitude, userLongitude]);
 
   return (
     <MapView
@@ -48,7 +48,7 @@ const Map = () => {
       className="w-full h-full rounded-2xl"
       tintColor="black"
       mapType="mutedStandard"
-      showPointsOfInterests={false}
+      showsPointsOfInterest={false}
       initialRegion={region}
       showsUserLocation={true}
       userInterfaceStyle={"light"}
@@ -58,7 +58,7 @@ const Map = () => {
         return (
           <Marker
             key={marker.id}
-            coordinates={{
+            coordinate={{
               latitude,
               longitude,
             }}
